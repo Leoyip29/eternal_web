@@ -137,7 +137,7 @@ function ProductVisual({ visual }: { visual: (typeof products)[number]["visual"]
 export default function OurProductSection() {
   return (
     <section className="bg-white py-18 sm:py-22 lg:py-28">
-      <div className="site-shell px-8">
+      <div className="site-shell  px-[var(--site-gutter)]">
         <div className="mx-auto mb-12 flex max-w-[620px] flex-col items-center text-center sm:mb-16">
           <h2 className="text-[36px] font-semibold uppercase tracking-[-0.03em] text-black sm:text-[44px] lg:text-[52px]">
             Our Products

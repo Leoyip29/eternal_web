@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "Home", href: "/", active: true },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about-us" },
   { label: "Stone catalogue", href: "/stone-catalogue" },
   { label: "Our Work", href: "/our-work" },
   { label: "Booking", href: "/booking" },
@@ -114,6 +116,23 @@ function MenuIcon() {
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (!pathname) {
+      return href === "/";
+    }
+
+    const segments = pathname.split("/").filter(Boolean);
+    const pathWithoutLocale =
+      segments.length > 0 ? `/${segments.slice(1).join("/")}` : "/";
+
+    if (href === "/") {
+      return pathWithoutLocale === "/";
+    }
+
+    return pathWithoutLocale === href;
+  };
 
   return (
     <header
@@ -151,7 +170,7 @@ export default function Header() {
               className="relative whitespace-nowrap rounded-full px-3 py-3 text-black transition-opacity hover:opacity-70 md:px-3 md:py-2 xl:px-1"
             >
               {item.label}
-              {item.active ? (
+              {isActive(item.href) ? (
                 <>
                   <span className="absolute inset-0 -z-10 rounded-full bg-black/6 xl:hidden" />
                   <span className="absolute -bottom-[2px] left-0 hidden h-[2px] w-full bg-black xl:block" />

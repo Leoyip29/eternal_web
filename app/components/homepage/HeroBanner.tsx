@@ -17,7 +17,7 @@ export default function HeroBanner() {
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#f5ecdf]/95 via-[#f5ecdf]/78 to-[#f5ecdf]/28 sm:from-[#f5ecdf]/88 sm:via-[#f5ecdf]/62 lg:from-[#f5ecdf]/82 lg:via-[#f5ecdf]/48 lg:to-transparent" />
 
-        <div className="site-shell px-8 relative z-10 grid h-full grid-cols-1 lg:grid-cols-[minmax(420px,0.9fr)_1.1fr]">
+        <div className="site-shell  relative z-10 grid h-full grid-cols-1 lg:grid-cols-[minmax(420px,0.9fr)_1.1fr]">
           <div className="flex items-end py-16 sm:py-20 lg:items-center lg:py-24">
             <div className="flex max-w-[640px] flex-col gap-8 rounded-[28px]  px-5 py-6 shadow-[0_12px_30px_rgba(0,0,0,0.08)]  sm:px-8 sm:py-8 lg:gap-12 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-0">
               <div className="flex flex-col gap-5 sm:gap-7">
