@@ -1,5 +1,6 @@
 import { locales } from "../../lib/i18n";
-import HeroBanner from "../components/HeroBanner";
+import HeroBanner from "../components/homepage/HeroBanner";
+import OurProductSection from "../components/homepage/OurProductSection";
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
@@ -39,7 +40,10 @@ export default async function LocaleHomePage({ params }: PageProps) {
     //     </div>
     //   </div>
     // </main>
-    <HeroBanner />
+    <>
+      <HeroBanner />
+      <OurProductSection />
+    </>
   );
 }
 

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Locale, locales } from "../../lib/i18n";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
@@ -22,9 +23,10 @@ export default async function LocaleLayout({
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-black">
       <Header />
-      {children}
+      <div className="flex-1">{children}</div>
+      <Footer />
     </div>
   );
 }

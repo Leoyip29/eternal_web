@@ -127,7 +127,7 @@ export default function Header() {
         WebkitBackdropFilter: "blur(64px)",
       }}
     >
-      <div className=" flex flex-wrap items-center justify-between gap-x-3 gap-y-3 px-6 py-3 xl:min-h-[72px] xl:flex-nowrap xl:gap-8 xl:py-[10px]">
+      <div className=" max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-3 px-8 py-3 xl:min-h-[72px] xl:flex-nowrap xl:gap-8 xl:py-[10px]">
         <Link
           href="/"
           onClick={() => setIsMobileMenuOpen(false)}
