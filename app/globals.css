@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --font-instrument-sans: "Instrument Sans", sans-serif;
+  --site-gutter: 1.5rem;
+  color-scheme: white;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-instrument-sans);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --site-gutter: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --site-gutter: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --site-gutter: clamp(72px, 7vw, 130px);
+  }
+}
+
+@layer components {
+  .site-shell {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+
+  .site-gutter {
+    padding-inline: var(--site-gutter);
+    
+  }
+}
