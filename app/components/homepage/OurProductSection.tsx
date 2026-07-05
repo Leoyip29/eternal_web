@@ -1,49 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
+import type { ProductsSection } from "../../../lib/api/types";
 
-const products = [
-  {
-    title: "URN",
-    description:
-      "Unique natural jade urns with custom engraving options, available in sizes for public and private shrines",
-    href: "/stone-catalogue",
-    visual: "urn",
-  },
-  {
-    title: "Niche stone tablet",
-    description:
-      "Browse elegant memorial niche tablets with personalized and custom-made designs crafted for every family.",
-    href: "/stone-catalogue",
-    visual: "tablet",
-  },
-  {
-    title: "Special Colored Porcelain & Pictorial Tablets",
-    description:
-      "Unique natural jade urns with custom engraving options, available in sizes for public and private shrines",
-    href: "/stone-catalogue",
-    visual: "porcelain",
-  },
-  {
-    title: "Cemetery Gravesites / Buried Gravestones",
-    description:
-      "Custom tombstones and memorial monuments crafted in timeless traditional and modern designs.",
-    href: "/our-work",
-    visual: "gravesite",
-  },
-  {
-    title: "Huayong Family Columbarium",
-    description:
-      "Unique natural jade urns with custom engraving options, available in sizes for public and private shrines",
-    href: "/our-work",
-    visual: "columbarium",
-  },
-  {
-    title: "Ash Scattering Memorial Monuments",
-    description:
-      "Explore elegant engraved and porcelain memorial monuments designed with timeless craftsmanship.",
-    href: "/booking",
-    visual: "plates",
-  },
+interface OurProductSectionProps {
+  productsSection: ProductsSection;
+}
+
+const VISUAL_CYCLE = [
+  "urn",
+  "tablet",
+  "porcelain",
+  "gravesite",
+  "columbarium",
+  "plates",
 ] as const;
+
+type VisualKind = (typeof VISUAL_CYCLE)[number];
 
 function ArrowIcon() {
   return (
@@ -65,7 +37,7 @@ function ArrowIcon() {
   );
 }
 
-function ProductVisual({ visual }: { visual: (typeof products)[number]["visual"] }) {
+function ProductVisual({ visual }: { visual: VisualKind }) {
   if (visual === "urn") {
     return (
       <div className="relative h-full w-full overflow-hidden rounded-[18px] bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.2),transparent_18%),radial-gradient(circle_at_50%_95%,rgba(0,0,0,0.55),transparent_23%),linear-gradient(180deg,#5c5e66_0%,#9b9ea3_45%,#5b5d63_100%)]">
@@ -134,31 +106,50 @@ function ProductVisual({ visual }: { visual: (typeof products)[number]["visual"]
   );
 }
 
-export default function OurProductSection() {
+export default function OurProductSection({
+  productsSection,
+}: OurProductSectionProps) {
+  const products = [...productsSection.products].sort(
+    (a, b) => a.order - b.order
+  );
+
   return (
     <section className="bg-white py-18 sm:py-22 lg:py-28">
       <div className="site-shell  px-[var(--site-gutter)]">
         <div className="mx-auto mb-12 flex max-w-[620px] flex-col items-center text-center sm:mb-16">
           <h2 className="text-[36px] font-semibold uppercase tracking-[-0.03em] text-black sm:text-[44px] lg:text-[52px]">
-            Our Products
+            {productsSection.heading.headline}
           </h2>
           <p className="mt-3 text-[16px] text-[#2b2b2b] sm:text-[18px]">
-            A Selection of Recent Memorials
+            {productsSection.heading.subtext}
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
-            <article key={product.title} className="group">
-              <Link href={product.href} className="block">
+          {products.map((product, index) => (
+            <article key={product.id} className="group">
+              <Link href="/stone-catalogue" className="block">
                 <div className="aspect-[0.93] overflow-hidden rounded-[18px] bg-[#f3ede5] shadow-[0_8px_20px_rgba(0,0,0,0.06)] transition-transform duration-300 group-hover:-translate-y-1">
-                  <ProductVisual visual={product.visual} />
+                  {product.image ? (
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="rounded-[18px] object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <ProductVisual
+                      visual={VISUAL_CYCLE[index % VISUAL_CYCLE.length]}
+                    />
+                  )}
                 </div>
 
                 <div className="mt-5 flex items-start justify-between gap-4">
                   <div className="max-w-[92%]">
                     <h3 className="text-[24px] font-semibold leading-[1.18] tracking-[-0.03em] text-[#111111]">
-                      {product.title}
+                      {product.name}
                     </h3>
                     <p className="mt-2 text-[16px] leading-8 text-[#555555]">
                       {product.description}

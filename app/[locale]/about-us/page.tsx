@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Locale, locales } from "../../../lib/i18n";
+import { getHomePage } from "../../../lib/api/home";
 import OurServicesSection from "@/app/components/homepage/OurServicesSection";
 
 interface AboutUsPageProps {
@@ -34,6 +35,8 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
   if (!locales.includes(locale as Locale)) {
     notFound();
   }
+
+  const homePage = await getHomePage(locale as Locale);
 
   return (
     <main className="bg-[#f7f3ec]">
@@ -102,7 +105,10 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         </div>
       </section>
 
-      <OurServicesSection />
+      <OurServicesSection
+        servicesSection={homePage.services_section}
+        howItWorks={homePage.how_it_works}
+      />
     </main>
   );
 }

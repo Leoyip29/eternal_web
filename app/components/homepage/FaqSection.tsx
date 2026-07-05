@@ -1,44 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import type { FAQSection } from "../../../lib/api/types";
 
-const faqs = [
-  {
-    question: "What Types Of Granite Products Do You Manufacture?",
-    answer:
-      "We manufacture high-quality granite products for memorials, gravestones, monuments, architectural projects, landscaping, flooring, wall cladding, and custom stone applications.",
-  },
-  {
-    question: "Do You Offer Custom Stone Designs?",
-    answer:
-      "Yes. We create custom stone pieces tailored to memorial preferences, site conditions, inscription styles, and family requirements.",
-  },
-  {
-    question: "What Materials Do You Use?",
-    answer:
-      "Our collection includes granite, marble, bluestone, porcelain detailing, and selected companion materials chosen for durability and finish.",
-  },
-  {
-    question: "Can You Create Personalized Gravestones And Memorials?",
-    answer:
-      "Absolutely. We can personalize size, silhouette, engraving, portrait details, and finishing touches to honour each family story.",
-  },
-  {
-    question: "What Granite Finishes Are Available?",
-    answer:
-      "We offer polished, honed, flamed, bush-hammered, and custom-textured finishes depending on the stone type and intended design.",
-  },
-  {
-    question: "How Durable Is Granite Stone?",
-    answer:
-      "Granite is highly durable, weather-resistant, and well suited for outdoor memorial use when properly fabricated and installed.",
-  },
-  {
-    question: "Do You Handle Bulk Or Commercial Orders?",
-    answer:
-      "Yes. We support larger projects for cemeteries, columbaria, institutions, and commercial stone programs with coordinated production planning.",
-  },
-] as const;
+interface FaqSectionProps {
+  faqSection: FAQSection;
+}
 
 function MinusIcon() {
   return (
@@ -68,8 +35,9 @@ function PlusIcon() {
   );
 }
 
-export default function FaqSection() {
+export default function FaqSection({ faqSection }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState(0);
+  const faqs = [...faqSection.faqs].sort((a, b) => a.order - b.order);
 
   return (
     <section className="bg-white py-18 sm:py-22 lg:py-28">
@@ -87,7 +55,7 @@ export default function FaqSection() {
 
               return (
                 <div
-                  key={item.question}
+                  key={item.id}
                   className="border-b border-[#d9ddd5]"
                 >
                   <button

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -136,7 +137,7 @@ export default function Header() {
 
   return (
     <header
-      className="w-full text-[#272727]"
+      className="relative z-50 w-full text-[#272727]"
       style={{
         background: "#F6EEE3",
         borderBottom: "1px solid #FFFFFF33",
@@ -181,6 +182,7 @@ export default function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-3 xl:gap-[24px]">
+          <LanguageSwitcher />
           <button
             type="button"
             aria-label="Search"

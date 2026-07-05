@@ -1,66 +1,13 @@
 import Image from "next/image";
+import type { HowItWorks, ServicesSection } from "../../../lib/api/types";
 
-const services = [
-  {
-    title: "Design a Gravestone",
-    description:
-      "Begin with a shape and silhouette that honours their memory.",
-    icon: "pen",
-  },
-  {
-    title: "Choose Your Material",
-    description:
-      "Granite, marble, or bluestone each with its own quiet beauty.",
-    icon: "layers",
-  },
-  {
-    title: "Add Engraving",
-    description:
-      "Names, dates and inscriptions in Chinese or English calligraphy.",
-    icon: "type",
-  },
-  {
-    title: "Order Online",
-    description:
-      "Confirm your stone with our team and we handle the rest with care.",
-    icon: "box",
-  },
-] as const;
+interface OurServicesSectionProps {
+  servicesSection: ServicesSection;
+  howItWorks: HowItWorks;
+}
 
-const processSteps = [
-  {
-    step: "Step 01",
-    title: "Browse Stones",
-    description:
-      "Explore our curated catalogue of memorial designs and materials.",
-    icon: "search",
-    tone: "sand",
-  },
-  {
-    step: "Step 02",
-    title: "Customise Details",
-    description:
-      "Refine engraving, dimensions, finish and floral details.",
-    icon: "sliders",
-    tone: "sage",
-  },
-  {
-    step: "Step 03",
-    title: "Submit Order",
-    description:
-      "Confirm via WhatsApp, secure online portal or in-person visit.",
-    icon: "send",
-    tone: "sand",
-  },
-  {
-    step: "Step 04",
-    title: "Confirm & Deliver",
-    description:
-      "White-glove installation at the cemetery or columbarium of choice.",
-    icon: "check",
-    tone: "sage",
-  },
-] as const;
+const SERVICE_ICON_CYCLE = ["pen", "layers", "type", "box"] as const;
+const STEP_ICON_CYCLE = ["search", "sliders", "send", "check"] as const;
 
 function PenIcon() {
   return (
@@ -203,7 +150,7 @@ function CheckIcon() {
   );
 }
 
-function ServiceIcon({ type }: { type: (typeof services)[number]["icon"] }) {
+function ServiceIcon({ type }: { type: (typeof SERVICE_ICON_CYCLE)[number] }) {
   if (type === "layers") {
     return <LayersIcon />;
   }
@@ -219,11 +166,7 @@ function ServiceIcon({ type }: { type: (typeof services)[number]["icon"] }) {
   return <PenIcon />;
 }
 
-function ProcessIcon({
-  type,
-}: {
-  type: (typeof processSteps)[number]["icon"];
-}) {
+function ProcessIcon({ type }: { type: (typeof STEP_ICON_CYCLE)[number] }) {
   if (type === "sliders") {
     return <SlidersIcon />;
   }
@@ -239,12 +182,20 @@ function ProcessIcon({
   return <SearchIcon />;
 }
 
-export default function OurServicesSection() {
+export default function OurServicesSection({
+  servicesSection,
+  howItWorks,
+}: OurServicesSectionProps) {
+  const steps = [...servicesSection.steps].sort((a, b) => a.order - b.order);
+  const processSteps = [...howItWorks.steps].sort(
+    (a, b) => a.step_number - b.step_number
+  );
+
   return (
     <>
       <section className="relative overflow-hidden text-white">
         <Image
-          src="/homepage/ourServices.jpg"
+          src={servicesSection.background_image ?? "/homepage/ourServices.jpg"}
           alt=""
           fill
           className="object-cover"
@@ -254,26 +205,34 @@ export default function OurServicesSection() {
         <div className="site-shell relative px-[var(--site-gutter)] py-16 sm:py-20 lg:py-24">
           <div className="max-w-[620px]">
             <h2 className="text-[36px] font-medium uppercase tracking-[-0.03em] sm:text-[46px] lg:text-[52px]">
-              Our Services
+              {servicesSection.headline}
             </h2>
             <p className="mt-3 text-[18px] text-white/65 sm:text-[20px]">
-              A Considered Path, From First Thought to Final Stone
+              {servicesSection.subtext}
             </p>
           </div>
 
           <div className="mt-10 h-px w-full bg-white/16 sm:mt-12 lg:mt-14" />
 
           <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4 xl:gap-10">
-            {services.map((service) => (
-              <article key={service.title} className="max-w-[280px]">
+            {steps.map((step, index) => (
+              <article key={step.id} className="max-w-[280px]">
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#222222] shadow-[0_6px_20px_rgba(0,0,0,0.18)]">
-                  <ServiceIcon type={service.icon} />
+                  {step.icon ? (
+                    <div className="relative h-5 w-5">
+                      <Image src={step.icon} alt="" fill className="object-contain" />
+                    </div>
+                  ) : (
+                    <ServiceIcon
+                      type={SERVICE_ICON_CYCLE[index % SERVICE_ICON_CYCLE.length]}
+                    />
+                  )}
                 </div>
                 <h3 className="text-[24px] font-semibold leading-[1.25] tracking-[-0.03em] text-white">
-                  {service.title}
+                  {step.title}
                 </h3>
                 <p className="mt-4 text-[16px] leading-8 text-white/66">
-                  {service.description}
+                  {step.description}
                 </p>
               </article>
             ))}
@@ -286,38 +245,50 @@ export default function OurServicesSection() {
         <div className="site-shell relative px-[var(--site-gutter)] py-18 sm:py-22 lg:py-26">
           <div className="mx-auto max-w-[620px] text-center">
             <h2 className="text-[34px] font-semibold uppercase tracking-[-0.04em] text-black sm:text-[44px] lg:text-[50px]">
-              How It Works
+              {howItWorks.headline}
             </h2>
             <p className="mt-3 text-[18px] text-[#6b6d6a] sm:text-[20px]">
-              Four Gentle Steps, Guided With Care
+              {howItWorks.subtext}
             </p>
           </div>
 
           <div className="relative mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 xl:grid-cols-4 xl:gap-8">
             <div className="absolute left-[12.5%] right-[12.5%] top-6 hidden h-px bg-[#e7dbc9] xl:block" />
-            {processSteps.map((step) => (
-              <article
-                key={step.step}
-                className="relative flex flex-col items-center text-center"
-              >
-                <div
-                  className={`relative z-10 flex h-14 w-14 items-center justify-center rounded-full border-4 border-[#faf8f3] text-white shadow-[0_10px_24px_rgba(0,0,0,0.08)] ${
-                    step.tone === "sage" ? "bg-[#9baa88]" : "bg-[#cfad69]"
-                  }`}
+            {processSteps.map((step, index) => {
+              const tone = index % 2 === 0 ? "sand" : "sage";
+
+              return (
+                <article
+                  key={step.id}
+                  className="relative flex flex-col items-center text-center"
                 >
-                  <ProcessIcon type={step.icon} />
-                </div>
-                <span className="mt-8 text-[12px] uppercase tracking-[0.38em] text-[#5f625d]">
-                  {step.step}
-                </span>
-                <h3 className="mt-4 text-[24px] font-semibold leading-[1.2] tracking-[-0.03em] text-[#343933]">
-                  {step.title}
-                </h3>
-                <p className="mt-3 max-w-[250px] text-[16px] leading-7 text-[#666a65]">
-                  {step.description}
-                </p>
-              </article>
-            ))}
+                  <div
+                    className={`relative z-10 flex h-14 w-14 items-center justify-center rounded-full border-4 border-[#faf8f3] text-white shadow-[0_10px_24px_rgba(0,0,0,0.08)] ${
+                      tone === "sage" ? "bg-[#9baa88]" : "bg-[#cfad69]"
+                    }`}
+                  >
+                    {step.icon ? (
+                      <div className="relative h-5 w-5">
+                        <Image src={step.icon} alt="" fill className="object-contain" />
+                      </div>
+                    ) : (
+                      <ProcessIcon
+                        type={STEP_ICON_CYCLE[index % STEP_ICON_CYCLE.length]}
+                      />
+                    )}
+                  </div>
+                  <span className="mt-8 text-[12px] uppercase tracking-[0.38em] text-[#5f625d]">
+                    {`Step 0${step.step_number}`}
+                  </span>
+                  <h3 className="mt-4 text-[24px] font-semibold leading-[1.2] tracking-[-0.03em] text-[#343933]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 max-w-[250px] text-[16px] leading-7 text-[#666a65]">
+                    {step.description}
+                  </p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

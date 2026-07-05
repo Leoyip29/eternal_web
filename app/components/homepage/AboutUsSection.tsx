@@ -1,12 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { AboutUs } from "../../../lib/api/types";
 
-export default function AboutUsSection() {
+interface AboutUsSectionProps {
+  aboutUs: AboutUs;
+}
+
+export default function AboutUsSection({ aboutUs }: AboutUsSectionProps) {
+  const backgroundImage = aboutUs.images[0]?.image ?? "/homepage/aboutus.jpg";
+
   return (
     <section className="relative overflow-hidden bg-[#1d1d1b] text-white">
       <div className="site-shell relative min-h-[520px] px-[var(--site-gutter)] py-12 sm:min-h-[620px] sm:py-16 lg:min-h-[640px] lg:py-14">
         <Image
-          src="/homepage/aboutus.jpg"
+          src={backgroundImage}
           alt="Stone memorial collection"
           fill
           sizes="100vw"
@@ -18,20 +25,10 @@ export default function AboutUsSection() {
         <div className="relative z-10 grid h-full items-start lg:grid-cols-[0.62fr_1.38fr]">
           <div className="max-w-[468px] lg:self-start lg:pt-12 xl:pt-16">
             <h2 className="text-[44px] font-semibold uppercase tracking-[-0.05em] text-white sm:text-[56px] lg:text-[64px]">
-              About Us
+              {aboutUs.headline}
             </h2>
             <p className="mt-6 text-[16px] leading-[1.32] text-white/88 sm:text-[16px] lg:text-[15px]">
-              At Stone Factory, we specialize in crafting premium-quality
-              granite stone products with precision, durability, and timeless
-              design. With years of experience in stone manufacturing, we
-              create custom granite solutions for a wide range of purposes, from
-              elegant memorial and gravestone designs to architectural,
-              decorative, and construction applications. Our commitment to
-              quality craftsmanship, modern production techniques, and customer
-              satisfaction allows us to deliver stones that stand strong for
-              generations. Every piece is carefully shaped, polished, and
-              finished to reflect strength, beauty, and respect for the memories
-              and structures they represent.
+              {aboutUs.body_text}
             </p>
             <Link
               href="/about-us"

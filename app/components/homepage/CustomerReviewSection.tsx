@@ -1,4 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import type { TestimonialsSection } from "../../../lib/api/types";
+
+interface CustomerReviewSectionProps {
+  testimonialsSection: TestimonialsSection;
+}
 
 function StarIcon() {
   return (
@@ -39,8 +47,29 @@ function ArrowRightIcon() {
   );
 }
 
+export default function CustomerReviewSection({
+  testimonialsSection,
+}: CustomerReviewSectionProps) {
+  const testimonials = [...testimonialsSection.testimonials].sort(
+    (a, b) => a.order - b.order
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = testimonials[activeIndex];
 
-export default function CustomerReviewSection() {
+  const goToPrevious = () => {
+    setActiveIndex(
+      (index) => (index - 1 + testimonials.length) % testimonials.length
+    );
+  };
+
+  const goToNext = () => {
+    setActiveIndex((index) => (index + 1) % testimonials.length);
+  };
+
+  if (!active) {
+    return null;
+  }
+
   return (
     <section className="bg-[#f8f8f6] py-18 sm:py-22 lg:py-28">
       <div className="site-shell px-[var(--site-gutter)] overflow-hidden bg-[#f8f8f6] lg:grid lg:grid-cols-[0.94fr_1fr]">
@@ -51,27 +80,28 @@ export default function CustomerReviewSection() {
           </div>
 
           <h2 className="max-w-[420px] text-[42px] font-semibold leading-[1.02] tracking-[-0.05em] text-[#111111] sm:text-[54px]">
-            What <span className="text-[#738460]">Our Customers</span> are saying?
+            {testimonialsSection.headline}
           </h2>
 
           <p className="mt-8 max-w-[420px] text-[16px] leading-7 text-[#2f312d]">
-            &quot;The craftsmanship and detailing on the granite memorial stone exceeded our expectations. The team was professional, respectful, and delivered everything on time.&quot;
+            &quot;{active.review_text}&quot;
           </p>
 
           <div className="mt-6 flex items-center gap-1 text-[#f2b01e]">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: active.star_rating }).map((_, index) => (
               <StarIcon key={index} />
             ))}
           </div>
 
           <p className="mt-3 text-[15px] font-semibold text-[#212320]">
-            Michael Thompson
+            {active.customer_name}
           </p>
 
           <div className="mt-10 flex items-center gap-3 text-[#9bab91]">
             <button
               type="button"
               aria-label="Previous review"
+              onClick={goToPrevious}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-[#dce1d7] transition-colors hover:bg-[#eef2ea]"
             >
               <ArrowLeftIcon />
@@ -79,6 +109,7 @@ export default function CustomerReviewSection() {
             <button
               type="button"
               aria-label="Next review"
+              onClick={goToNext}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-[#dce1d7] transition-colors hover:bg-[#eef2ea]"
             >
               <ArrowRightIcon />
